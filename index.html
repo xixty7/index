@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Alarcón</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+            transition: all 1s ease;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 90%;
+            width: 400px;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2rem;
+            color: #ff4757;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        #pregunta {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            min-height: 4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .botones {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #siBtn {
+            background: linear-gradient(45deg, #2ed573, #7bed9f);
+            color: #1e3799;
+            box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
+        }
+
+        #noBtn {
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* Animación para cambio de pregunta */
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MODO DEMONIO */
+        body.modo-demonio {
+            background-color: #000;
+            animation: shake 0.1s infinite;
+        }
+
+        body.modo-demonio .container {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid red;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+            animation: glitch 0.3s infinite;
+        }
+
+        body.modo-demonio h1 {
+            color: #ff0000;
+            text-shadow: 2px 2px 0px #000, -2px -2px 0px #fff;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        body.modo-demonio #pregunta {
+            font-family: "Chiller", "Courier New", monospace;
+            color: red;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translate(1px, 1px) rotate(0deg);
+            }
+
+            10% {
+                transform: translate(-1px, -2px) rotate(-1deg);
+            }
+
+            20% {
+                transform: translate(-3px, 0px) rotate(1deg);
+            }
+
+            30% {
+                transform: translate(3px, 2px) rotate(0deg);
+            }
+
+            40% {
+                transform: translate(1px, -1px) rotate(1deg);
+            }
+
+            50% {
+                transform: translate(-1px, 2px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translate(-3px, 1px) rotate(0deg);
+            }
+
+            70% {
+                transform: translate(3px, 1px) rotate(-1deg);
+            }
+
+            80% {
+                transform: translate(-1px, -1px) rotate(1deg);
+            }
+
+            90% {
+                transform: translate(1px, 2px) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(1px, -2px) rotate(-1deg);
+            }
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: skew(0deg);
+            }
+
+            20% {
+                transform: skew(-10deg);
+            }
+
+            40% {
+                transform: skew(10deg);
+            }
+
+            60% {
+                transform: skew(-5deg);
+            }
+
+            80% {
+                transform: skew(5deg);
+            }
+
+            100% {
+                transform: skew(0deg);
+            }
+        }
+
+        /* FAKE BSOD */
+        #bsod {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0078d7;
+            color: white;
+            z-index: 9999;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 100px;
+            box-sizing: border-box;
+            text-align: left;
+            cursor: none;
+        }
+
+        #bsod h1 {
+            font-size: 100px;
+            margin: 0 0 20px 0;
+            font-weight: lighter;
+            color: white;
+            text-shadow: none;
+        }
+
+        #bsod p {
+            font-size: 24px;
+            line-height: 1.5;
+        }
+
+        .qr-code {
+            margin-top: 30px;
+            width: 120px;
+            height: 120px;
+            background: white;
+            display: inline-block;
+        }
+
+        .progress {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Alarcón Quiz</h1>
+        <div id="pregunta" class="fade-in">¿Estás listo para las preguntas turbias?</div>
+
+        <div class="botones">
+            <button id="siBtn">SÍ</button>
+            <button id="noBtn">NO</button>
+        </div>
+    </div>
+
+    <!-- JUMPSCARE SCREEN -->
+    <div id="jumpscare"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: black; cursor: none;">
+        <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; animation: pulse 0.1s infinite;">
+            <!-- Scary Face SVG -->
+            <defs>
+                <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <stop offset="0%" style="stop-color:white;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:black;stop-opacity:1" />
+                </radialGradient>
+            </defs>
+            <!-- Background mess -->
+            <rect width="100%" height="100%" fill="black" />
+
+            <!-- Ghostly Shape -->
+            <path d="M20,20 Q50,-20 80,20 Q100,60 50,100 Q0,60 20,20" fill="white" stroke="none" />
+
+            <!-- Hollow Eyes -->
+            <ellipse cx="35" cy="40" rx="10" ry="15" fill="black" />
+            <ellipse cx="65" cy="40" rx="10" ry="15" fill="black" />
+
+            <!-- Screaming Mouth -->
+            <path d="M30,70 Q50,95 70,70 Q50,5 30,70" fill="black" />
+
+            <!-- Red Eyes Pupils -->
+            <circle cx="35" cy="40" r="2" fill="red" />
+            <circle cx="65" cy="40" r="2" fill="red" />
+        </svg>
+    </div>
+
+    <script>
+        // Array de preguntas
+        // Puedes agregar más preguntas aquí siguiendo el formato.
+        const preguntas = [
+            "¿Te masturbaste hoy pensando en las nalgas de Alarcón?",
+            "¿Te gusta el culo de alarcon?",
+            "¿Se lo metes a alarcon?",
+            "¿Te follarias a Np?",
+            "¿Te follarias a Alarcon?",
+        ];
+
+        let indiceActual = 0;
+        const preguntaElement = document.getElementById('pregunta');
+        const siBtn = document.getElementById('siBtn');
+        const noBtn = document.getElementById('noBtn');
+        const jumpscare = document.getElementById('jumpscare');
+        const container = document.querySelector('.container');
+
+        let audioCtx;
+
+        function playScreech() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'sawtooth';
+            osc2.type = 'square';
+
+            // Screeching noise
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
+            osc.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 1.0);
+
+            osc2.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc2.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+
+            // Distortion
+            const distortion = audioCtx.createWaveShaper();
+            function makeDistortionCurve(amount) {
+                let k = typeof amount === 'number' ? amount : 50,
+                    n_samples = 44100,
+                    curve = new Float32Array(n_samples),
+                    deg = Math.PI / 180,
+                    i = 0,
+                    x;
+                for (; i < n_samples; ++i) {
+                    x = i * 2 / n_samples - 1;
+                    curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
+                }
+                return curve;
+            }
+            distortion.curve = makeDistortionCurve(400);
+            distortion.oversample = '4x';
+
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+
+            osc.connect(distortion);
+            osc2.connect(distortion);
+            distortion.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc2.start();
+
+            // Loop scream
+            setInterval(() => {
+                osc.frequency.setValueAtTime(Math.random() * 1000 + 200, audioCtx.currentTime);
+                osc2.frequency.setValueAtTime(Math.random() * 1000 + 200, audioCtx.currentTime);
+            }, 100);
+        }
+
+        function activarModoDemonio() {
+            // Hide everything
+            container.style.display = 'none';
+            document.body.style.cursor = 'none';
+
+            // Show jumpscare
+            jumpscare.style.display = 'block';
+
+            // Play Audio
+            playScreech();
+
+            // Go fullscreen if possible
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+        }
+
+        function siguientePregunta() {
+            // Animación de salida (opcional, aquí solo cambiamos texto y reiniciamos animación entrada)
+            preguntaElement.classList.remove('fade-in');
+            void preguntaElement.offsetWidth; // Trigger reflow
+
+            // Avanzar índice
+            indiceActual++;
+
+            // Verificar si quedan preguntas
+            if (indiceActual < preguntas.length) {
+                preguntaElement.textContent = preguntas[indiceActual];
+                preguntaElement.classList.add('fade-in');
+            } else {
+                // Final del cuestionario
+                preguntaElement.innerHTML = "¡Has terminado el cuestionario... <br>por ahora! 😈";
+                preguntaElement.classList.add('fade-in');
+                siBtn.style.display = 'none';
+                noBtn.style.display = 'none';
+            }
+        }
+
+        // Inicializar con la primera pregunta del array si el usuario ya pasó la intro
+        // O dejar la intro y que el primer click lleve a la primera pregunta
+        // Vamos a hacer que el primer click en CUALQUIERA lleve a la pregunta 0
+        let iniciado = false;
+
+        function manejarClick(respuesta) {
+
+            // Si pulsa NO
+            if (respuesta === false) {
+                activarModoDemonio();
+                return;
+            }
+
+            if (!iniciado) {
+                iniciado = true;
+                indiceActual = 0;
+                preguntaElement.textContent = preguntas[0];
+                return;
+            }
+
+            console.log("Respondió " + (respuesta ? "SÍ" : "NO") + " a: " + preguntas[indiceActual]);
+            siguientePregunta();
+        }
+
+        siBtn.onclick = () => manejarClick(true);
+        noBtn.onclick = () => manejarClick(false);
+
+    </script>
+</body>
+
+</html>
